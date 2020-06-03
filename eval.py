@@ -3,9 +3,7 @@ import torchtext
 import absl.flags
 import absl.app
 from tqdm import tqdm
-import model
-import functions
-from config import ControllerConfig, MemoryConfig, TrainingConfig
+from core import functions
 
 # user flags
 FLAGS = absl.flags.FLAGS

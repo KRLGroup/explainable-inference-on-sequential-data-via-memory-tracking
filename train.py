@@ -8,10 +8,10 @@ import pickle
 import yaml
 import numpy as np
 from tqdm import tqdm
-import model
-import dnc.explanation
-import functions
-from config import ControllerConfig, MemoryConfig, TrainingConfig
+from core import model
+import core.dnc.explanation
+from core import functions
+from core.config import ControllerConfig, MemoryConfig, TrainingConfig
 
 # user flags
 FLAGS = absl.flags.FLAGS
@@ -178,9 +178,9 @@ def run_training(path_training, path_val, path_model, top_k, required_explanatio
     network.embeddings.weight.data.copy_(pre_trained_embeddings)
     network.embeddings.weight.requires_grad = True
     
-    explanation_mod = dnc.explanation.ExplanationModule(padding_value=padding_index,top_k=top_k)
+    explanation_mod = core.dnc.explanation.ExplanationModule(padding_value=padding_index,top_k=top_k)
     loss_function = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(network.parameters(), lr=training_parameters.learning_rate)
+    optimizer = optim.Adam(network.parameters(), lr=training_parameters.learning_rate, eps=1e-7)
 
     # initialize variables
     top1_acc = 0.0
@@ -198,7 +198,7 @@ def run_training(path_training, path_val, path_model, top_k, required_explanatio
         if accuracy > top1_acc:
             top1_acc = accuracy
             print("saving model...")
-            checkpoint = {'controller_config':controller_config, 'memory_config':memory_config,
+            checkpoint = {'controller_config':config_dict['controller'], 'memory_config':config_dict['memory'],
             'state_dict':network.state_dict(), 'len_embeddings':len(pre_trained_embeddings)}
             torch.save(checkpoint, path_model)
 

@@ -25,6 +25,8 @@ Parameters:
    - use_surrogate <em>(bool: optional. Default:False)</em>: whether to get explanations during the training process. Setting True this parameters slow down the whole training process due to the calculation of surrogate ground truth (~ 5x time needed. It is needed only for the production of the paper Figure 6).
    - top_k <em>(int:optional.)</em> Threshold on the number of cells to be considered for each timestep. Needed only if use_surrogate is True.
 
+Note: in order to change the training parameters you have to edit the file config.yaml <em>core</em>
+
 Example:
 ```
 python train.py --path_model=models/sample_model.pt --path_training=dataset/train.csv --path_val=dataset/val.csv

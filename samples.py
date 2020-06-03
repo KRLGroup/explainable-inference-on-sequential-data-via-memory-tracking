@@ -3,9 +3,8 @@ import torchtext
 import absl.flags
 import absl.app
 from tqdm import tqdm
-import model
-from dnc.explanation import ExplanationModule
-import functions
+from core.dnc.explanation import ExplanationModule
+from core import functions
 
 # user flags
 FLAGS = absl.flags.FLAGS
