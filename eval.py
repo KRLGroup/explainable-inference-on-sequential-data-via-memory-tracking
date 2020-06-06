@@ -57,7 +57,7 @@ def evaluate(path_model, path_dataset):
     
     # get accuracy
     accuracy = run_val_epoch(network,iterator)    
-    print("Model Accuracy: {:.2f}".format(accuracy))
+    print("Model Accuracy: {:.3f}".format(accuracy))
 
 def main(argv):
 

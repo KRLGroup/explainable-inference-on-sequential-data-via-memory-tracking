@@ -185,12 +185,6 @@ class Memory(nn.Module):
             updated_usage = usage + (1 - usage) * write_weights
             return updated_usage
 
-    def _update_after_read(self, prev_usage,free_gate, read_weights):
-        free_gate = free_gate.unsqueeze(-1)
-        free_read_weights = free_gate*read_weights
-        phi = torch.prod(1-free_read_weights,1)
-        return prev_usage*phi
-
     def _allocate(self, usage_vector):
         """Computes allocation by sorting `usage`.
 

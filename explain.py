@@ -86,8 +86,8 @@ def explain(path_model, path_dataset, top_k):
 
     # get explanations and print
     best, worst = run_explanations(network,explanation_module,iterator)    
-    print("Best Premise Accuracy: {:.2f}".format(best))
-    print("Worst Premise Accuracy: {:.2f}".format(worst))
+    print("Best Premise Accuracy: {:.3f}".format(best))
+    print("Worst Premise Accuracy: {:.3f}".format(worst))
 
 def main(argv):
 

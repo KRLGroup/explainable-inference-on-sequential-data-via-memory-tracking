@@ -209,7 +209,7 @@ def main(argv):
     top_k = FLAGS.top_k
     use_surr = FLAGS.use_surrogate
     run_training(path_training,path_val, path_model, top_k, use_surr)
-
+    print("Training process ended! The new model is stored on {}.".format(path_model))
 
 if __name__ == '__main__':
   absl.app.run(main)
