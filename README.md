@@ -69,3 +69,5 @@ Example:
 ```
 python samples.py --model=models/sample_model.pt --dataset=dataset/test.csv --n_samples=1
 ```
+### References
+The porting is partially based on the code of the original DNC implementation available at https://github.com/deepmind/dnc

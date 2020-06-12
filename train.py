@@ -54,18 +54,22 @@ def run_explanations(network, explanation_module, data_iterator):
             outcome, rh, wh = network(story,[a1,a2])
             predicted = torch.argmax(outcome, 1)
 
-            sgt = explanation_module.get_sgt(network, background,answers )
-
-            # case where there are contraddictory surrogate ground truth
-            if len(set(sgt)) > 1:
-                covered += 1
-                rank, _ = explanation_module.get_rank(network, background,wh[0][0],rh[predicted.item()+1][0] )
-                best_prediction = sgt[rank[0]-1]
-                best_correct += (predicted == best_prediction).sum().item()
-                worst_prediction = sgt[rank[-1]-1]
-                worst_correct += (predicted == worst_prediction).sum().item()
-                best_accuracy = float(best_correct / covered) if best_correct > 0 else 0
-                worst_accuracy = float(worst_correct / covered) if worst_correct > 0 else 0
+            for index_elem in range(p1.shape[0]):
+                elem_background = [p1[index_elem:index_elem+1,:], p2[index_elem:index_elem+1,:],p3[index_elem:index_elem+1,:],p4[index_elem:index_elem+1,:]]
+                elem_answers = [a1[index_elem:index_elem+1,:], a2[index_elem:index_elem+1,:]]
+                elem_predicted = predicted[index_elem]
+                sgt = explanation_module.get_sgt(network, elem_background,elem_answers )
+                
+                # case where there are contraddictory surrogate ground truth
+                if len(set(sgt)) > 1:
+                    covered += 1
+                    rank, _ = explanation_module.get_rank(network, elem_background,wh[0][0],rh[elem_predicted.item()+1][0] )
+                    best_prediction = sgt[rank[0]-1]
+                    best_correct += (elem_predicted == best_prediction).sum().item()
+                    worst_prediction = sgt[rank[-1]-1]
+                    worst_correct += (elem_predicted == worst_prediction).sum().item()
+                    best_accuracy = float(best_correct / covered) if best_correct > 0 else 0
+                    worst_accuracy = float(worst_correct / covered) if worst_correct > 0 else 0
         #print
         pbar.set_postfix({'Best':best_accuracy,'Worst':worst_accuracy, 
         'cov':covered/total})
@@ -132,6 +136,7 @@ def run_val_epoch(network, data_iterator):
     with torch.no_grad():
         for _, data in enumerate(data_iterator):
             (_,p1, p2, p3, p4, a1, a2), y = data
+
             y = y - 1 # gold index
             story = torch.cat((p1,p2,p3,p4),1)
 
