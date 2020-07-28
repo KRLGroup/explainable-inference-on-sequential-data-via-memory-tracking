@@ -60,7 +60,7 @@ def run_explanations(network, explanation_module, data_iterator):
             # case where there are contraddictory surrogate ground truth
             if len(set(sgt)) > 1:
                 covered += 1
-                rank, _ = explanation_module.get_rank(network, background,wh[0][0],rh[predicted.item()+1][0] )
+                rank, _ = explanation_module.get_rank(background,wh[0][0],rh[predicted.item()+1][0] )
                 best_prediction = sgt[rank[0]-1]
                 best_correct += (predicted == best_prediction).sum().item()
                 worst_prediction = sgt[rank[-1]-1]
@@ -111,13 +111,14 @@ def generate_samples(n_samples,path_model, path_dataset, top_k, only_surrogate):
 
         # get surrogate
         sgt = explanation_module.get_sgt(network, background,answers )
-        rank, percentage = explanation_module.get_rank(network, background,wh[0][0],rh[predicted.item()+1][0] )
+        rank, percentage = explanation_module.get_rank(background,wh[0][0],rh[predicted.item()+1][0] )
         if only_surrogate and len(set(sgt)) > 1 or only_surrogate is False:
             generated +=1
             print("Sentence:")
             print(get_sentence(dataset,id[0]))
             print()
             print("Predicted Answer:"+str(predicted.item()))
+            print("True Answer:"+str(y.item()))
             print()
             for i,gt in enumerate(sgt):
                 print("Using only the premise {} the model outputs: {}".format(i+1,gt))

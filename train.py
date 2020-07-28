@@ -63,7 +63,7 @@ def run_explanations(network, explanation_module, data_iterator):
                 # case where there are contraddictory surrogate ground truth
                 if len(set(sgt)) > 1:
                     covered += 1
-                    rank, _ = explanation_module.get_rank(network, elem_background,wh[0][0],rh[elem_predicted.item()+1][0] )
+                    rank, _ = explanation_module.get_rank(elem_background,wh[0][0],rh[elem_predicted.item()+1][0] )
                     best_prediction = sgt[rank[0]-1]
                     best_correct += (elem_predicted == best_prediction).sum().item()
                     worst_prediction = sgt[rank[-1]-1]

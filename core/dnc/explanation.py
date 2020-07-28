@@ -7,6 +7,17 @@ class ExplanationModule():
         self.top_k = top_k
 
     def get_sgt(self,network, background, answers):
+        """ Return the surrogate ground truth given the element in backgrond
+        and the answers (=gold)
+
+        Args:
+            network : trained simplified dnc to get the predictions
+            background : inputs
+            answers : golds for the inputs. It has the same number of rows of background.
+
+        Returns:
+            [type]: [description]
+        """
         predictions = []
         for element in background:
             outcome, _, _ = network(element, answers)
@@ -64,11 +75,27 @@ class ExplanationModule():
         return all_cells
         
         
-    def get_rank(self,network, background, write_history,read_history):
+    def get_rank(self, inputs, write_history,read_history):
+        """ Function to return the explanations. In the Story Cloze Test
+        it returns the rank of premises. Override this function to use the
+        explanation module in other tasks
+
+        Args:
+            inputs : Input data for which we want retrieve explanations
+            write_history : History of write weights for each word in premises. Tensor of shapes [len(inputs), num_write_heads, memory_size]
+            read_history : History of read weights for each word in the chosen ending. Tensor of shapes [len(ending), num_read_heads, memory_size]
+
+        Returns:
+            rank : The ordered (desc) list of premises relevance
+            percentage : percentage on the time of reading for each premise. Same order of rank
+        """
+        print(write_history.shape)
+        print(read_history.shape)
+        exit()
         story_mapping = self._parse_write_history(write_history)
         read_cells = self._parse_read_history(read_history)
 
-        lens = [len(e[0]) for e in background]
+        lens = [len(e[0]) for e in inputs]
         premise_steps = torch.zeros(sum(lens))
         current_index = 0
         current_premise = 1
