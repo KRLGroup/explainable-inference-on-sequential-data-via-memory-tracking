@@ -42,7 +42,6 @@ class ExplanationModule():
         for t in range(write_weights.shape[0]):
             write_history_t = write_weights[t]
             median_value = torch.median(write_history_t)
-
             # the epsilon is needed to stabilize the process and avoid that cells with
             # very tiny improvements over median case are considered "special"
             written_cells = (write_history_t > median_value+1e-3).nonzero()[:, 1]
@@ -89,9 +88,6 @@ class ExplanationModule():
             rank : The ordered (desc) list of premises relevance
             percentage : percentage on the time of reading for each premise. Same order of rank
         """
-        print(write_history.shape)
-        print(read_history.shape)
-        exit()
         story_mapping = self._parse_write_history(write_history)
         read_cells = self._parse_read_history(read_history)
 
