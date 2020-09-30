@@ -1,0 +1,16 @@
+---
+training:
+  batch_size: 1
+  dropout: 0.2
+  max_grad_norm: 20
+  learning_rate: 1e-4
+controller:
+  input_size: 300
+  lstm_size: 128
+  num_layers: 1
+  clip_value: 20
+memory:
+  memory_size: 512
+  word_size: 303
+  write_heads: 1
+  read_heads: 4
