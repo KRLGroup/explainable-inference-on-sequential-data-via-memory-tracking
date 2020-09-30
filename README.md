@@ -8,6 +8,9 @@ Source code for the IJCAI2020 paper "Explainable Inference on Sequential Data vi
 
 <a href="https://pytorch.org/">PyTorch 1.5</a> <em>(architecture)</em>
 
+<a href="https://pytorch.org/text/">TorchText 0.4</a>  <em>(Dataset Management)</em>
+
+<a href="https://spacy.io/">SpaCy</a> with 'en' model  <em>(Dataset Management)</em>
 
 <a href="https://pypi.org/project/absl-py/"> absl</a> <em>(command line input)</em>
 
@@ -17,6 +20,14 @@ Source code for the IJCAI2020 paper "Explainable Inference on Sequential Data vi
 <a href="https://pydantic-docs.helpmanual.io/">Pydantic</a> <em>(Configuration Management) </em>
 
 <a href="https://pyyaml.org/wiki/PyYAMLDocumentation">PyYaml</a>  <em>(Configuration Management)</em>
+
+To install all the dependencies on a conda environment you can use the following commands:
+```
+conda install pytorch==1.5.1 torchvision==0.6.1 torchtext=0.4 -c pytorch
+conda install -c anaconda absl-py pydantic spacy
+python -m spacy download en
+```
+
 # Scripts
 
 ### train.py

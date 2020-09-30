@@ -287,7 +287,6 @@ class Memory(nn.Module):
         usage = self._update_usage(prev_state['usage'], prev_state['write_weights'])
         write_weights = self._write_weights(write_gate, usage)
         updated_memory = self._erase_and_write(prev_state['memory'], write_weights, write_vector, erase_vector)
-
         # read memory based only on content lookup
         read_weights = self.content_attention(prev_state['memory'], read_keys, read_strengths)
         read_vectors = torch.matmul(read_weights, updated_memory)
