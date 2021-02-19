@@ -203,7 +203,7 @@ class Memory(nn.Module):
         prod_sorted_usage = exclusive_cumprod(sorted_usage)
         sorted_allocation = sorted_nonusage * prod_sorted_usage
         _, inverse_indices = torch.topk(indices, k=self.num_rows, largest=False)
-        return self.batch_gather(sorted_allocation, inverse_indices)
+        return torch.gather(sorted_allocation,1,inverse_indices)
 
     def _allocation_weights(self, write_gates, num_writes, usage):
         """Calculates freeness-based locations for writing to.
