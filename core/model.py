@@ -8,7 +8,6 @@ class ClozeModel(nn.Module):
     def __init__(self, controller_config, memory_config, embedding_dim, embed_len ,
                     dropout=0.2):
             super(ClozeModel, self).__init__()
-            assert controller_config.input_size == embedding_dim
 
             # flags
             self._num_flags = 3
@@ -18,7 +17,8 @@ class ClozeModel(nn.Module):
             self.flag_o2 = torch.nn.parameter.Parameter(torch.tensor([0, 0, 1], dtype=torch.float32),requires_grad=False)
             self.query = torch.nn.parameter.Parameter(torch.zeros((1, 1, self._word_size)),requires_grad=False)
 
-
+            controller_config.input_size = embedding_dim + self._num_flags
+           
             # layers
             self.embeddings = nn.Embedding(embed_len, embedding_dim, padding_idx=0)
             self.dnc = SimplifiedDNC(controller_config, memory_config, output_dim=memory_config.word_size,

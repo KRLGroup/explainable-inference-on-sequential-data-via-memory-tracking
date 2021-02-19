@@ -24,7 +24,7 @@ class SimplifiedDNC(nn.Module):
         self.dropout = nn.Dropout(p=dropout)
 
         # layers
-        self.controller = nn.LSTMCell(input_size=controller_config.input_size+3,
+        self.controller = nn.LSTMCell(input_size=controller_config.input_size,
                                       hidden_size=controller_config.lstm_size)
         self.linear = nn.Linear(controller_config.lstm_size+
                             memory_config.word_size*memory_config.read_heads,
