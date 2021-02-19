@@ -4,16 +4,28 @@ import torch.nn as nn
 
 _EPSILON = 1e-6
 
-def exclusive_cumprod(x):
-    """Exclusive cumulative product [a, b, c] => [1, a, a * b]
-    *from https://github.com/j-min/MoChA-pytorch/blob/master/attention.py
+def exclusive_cumprod(tensor: torch.Tensor) -> torch.Tensor:
+    r"""Mimick functionality of tf.math.cumprod(..., exclusive=True), as it isn't available in PyTorch.
+    From: https://colab.research.google.com/drive/1rO8xo0TemN67d4mTpakrKrLp03b9bgCX#scrollTo=Qbdf8GDL4_0Z
+    Args:
+    tensor (torch.Tensor): Tensor whose cumprod (cumulative product, see `torch.cumprod`) along dim=-1
+        is to be computed.
+
+    Returns:
+    cumprod (torch.Tensor): cumprod of Tensor along dim=-1, mimiciking the functionality of
+        tf.math.cumprod(..., exclusive=True) (see `tf.math.cumprod` for details).
     """
-    batch_size, sequence_length = x.size()
-    if torch.cuda.is_available():
-        one_x = torch.cat([torch.ones(batch_size, 1).cuda(), x], dim=1)[:, :-1]
-    else:
-        one_x = torch.cat([torch.ones(batch_size, 1), x], dim=1)[:, :-1]
-    return torch.cumprod(one_x, dim=1)
+    # TESTED
+    # Only works for the last dimension (dim=-1)
+    dim = -1
+    # Compute regular cumprod first (this is equivalent to `tf.math.cumprod(..., exclusive=False)`).
+    cumprod = torch.cumprod(tensor, 1)
+    # "Roll" the elements along dimension 'dim' by 1 element.
+    cumprod = torch.roll(cumprod, 1, dim)
+    # Replace the first element by "1" as this is what tf.cumprod(..., exclusive=True) does.
+    cumprod[..., 0] = 1.
+
+    return cumprod
 
 class ContentAddressing(nn.Module):
     def __init__(self):
