@@ -61,14 +61,15 @@ class ExplanationModule():
             main read cells for the element `i` of the sequence.
         """
         all_cells = []
-        for t in range(read_weights.shape[0]):
+        starting_step = 0
+
+        for t in range(starting_step,read_weights.shape[0]):
             read_history_t = read_weights[t]
-            starting_step = 0
-            for head in range(starting_step, read_history_t.shape[0]):
+            for head in range(read_history_t.shape[0]):
                 history_head = read_history_t[head]
                 median = torch.median(history_head)
                 top_values, top_indices = torch.topk(history_head, self.top_k)
-                above_mean = (top_values > median).nonzero()[:, 0]
+                above_mean = (top_values > median + 1e-3).nonzero()[:, 0]
                 read_cells = top_indices[above_mean]
                 all_cells.append(read_cells)
         return all_cells
